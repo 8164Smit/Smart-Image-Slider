@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Image Slider</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <h2>Smart Image Slider</h2>
+    <div>
+        <img id="slideImage" src="" alt="Image Slider">
+        <p id="captionText"></p>
+        <p id="counter"></p>
+    </div>
+    <div class="controls">
+        <button onclick="prevSlide()">Prev</button>
+        <button onclick="nextSlide()">Next</button>
+        <button onclick="startAuto()">Auto Play</button>
+        <button onclick="stopAuto()">Pause</button>
+    </div>
+    <div class="input-box">
+        <input type="text" id="newImg" placeholder="Image URL">
+        <input type="text" id="newCaption" placeholder="Caption">
+        <button onclick="addSlide()">Add Slide</button>
+    </div>
+    <script>
+        let slides = [
+            { img: "https://picsum.photos/id/1015/400/250", caption: "Beautiful Sunset" },
+            { img: "https://picsum.photos/id/1016/400/250", caption: "Mountain View" },
+            { img: "https://picsum.photos/id/1020/400/250", caption: "Forest Path" }
+        ]
+        let current = 0
+        let timer
+
+        function showSlide(index) {
+            document.getElementById("slideImage").src = slides[index].img
+            document.getElementById("captionText").textContent = slides[index].caption
+            document.getElementById("counter").textContent = "Slide " + (index + 1) + " of " + slides.length
+            console.log("Slide " + (index + 1) + ": " + slides[index].caption)
+        }
+
+        function nextSlide() {
+            if (current < slides.length - 1) {
+                current++
+                showSlide(current)
+            } else {
+                console.log("This is the last slide.")
+                alert("This is the last slide.")
+            }
+        }
+
+        function prevSlide() {
+            if (current > 0) {
+                current--
+                showSlide(current)
+            } else {
+                console.log("This is the first slide.")
+                alert("This is the first slide.")
+            }
+        }
+
+        function startAuto() {
+            stopAuto()
+            timer = setInterval(() => {
+                if (current < slides.length - 1) {
+                    current++
+                    showSlide(current)
+                } else {
+                    console.log("Reached last slide in auto-play.")
+                    stopAuto()
+                }
+            }, 3000)
+        }
+
+        function stopAuto() {
+            clearInterval(timer)
+        }
+
+        function addSlide() {
+            let imgUrl = document.getElementById("newImg").value
+            let cap = document.getElementById("newCaption").value
+            if (imgUrl && cap) {
+                slides.push({ img: imgUrl, caption: cap })
+                console.log("New slide added: " + cap)
+                document.getElementById("newImg").value = ""
+                document.getElementById("newCaption").value = ""
+                showSlide(slides.length - 1)
+                current = slides.length - 1
+            } else {
+                alert("Please enter both Image URL and Caption.")
+            }
+        }
+
+        showSlide(current)
+    </script>
+</body>
+
+</html>
